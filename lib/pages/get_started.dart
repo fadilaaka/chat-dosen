@@ -1,4 +1,4 @@
-import 'package:chat_dosen/pages/home_page.dart';
+import 'package:chat_dosen/pages/login/menu_login.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -54,10 +54,10 @@ class GetStarted extends StatelessWidget {
                     const SizedBox(height: 16.0),
                     InkWell(
                       onTap: () {
-                        Navigator.push(
+                        Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const HomePage()));
+                                builder: (context) => const LoginMenu()));
                       },
                       child: Container(
                           margin: const EdgeInsets.only(top: 12),
