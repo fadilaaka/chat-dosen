@@ -1,10 +1,63 @@
-import 'package:chat_dosen/pages/login/menu_login.dart';
 import 'package:chat_dosen/pages/registration/menu_registration.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class RegistrasiMahasiswa extends StatelessWidget {
+class RegistrasiMahasiswa extends StatefulWidget {
   const RegistrasiMahasiswa({super.key});
+  @override
+  _RegistrasiMahasiswaState createState() => _RegistrasiMahasiswaState();
+}
+
+class _RegistrasiMahasiswaState extends State<RegistrasiMahasiswa> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final TextEditingController _namaController = TextEditingController();
+  final TextEditingController _nimController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<void> registerUser(String nama, String nim, String password) async {
+    try {
+      await _firestore.collection("users_mahasiswa").add({
+        "nama": nama,
+        "nim": nim,
+        "password": password,
+        "role": "mahasiswa"
+      });
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+                title: const Text("Sukses"),
+                content: const Text("Pendaftaran berhasil!"),
+                actions: <Widget>[
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushNamed("/loginmenu");
+                    },
+                    child: const Text("Ok"),
+                  )
+                ]);
+          });
+    } catch (error) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Error"),
+              content: Text(error.toString()),
+              actions: <Widget>[
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Ok"),
+                )
+              ],
+            );
+          });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +105,12 @@ class RegistrasiMahasiswa extends StatelessWidget {
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
-                        Row(children: const [
+                        Row(children: [
                           Expanded(
                             child: TextField(
-                              style: TextStyle(fontSize: 16),
-                              decoration: InputDecoration(
+                              controller: _namaController,
+                              style: const TextStyle(fontSize: 16),
+                              decoration: const InputDecoration(
                                   isDense: true,
                                   contentPadding: EdgeInsets.all(8),
                                   border: OutlineInputBorder(
@@ -85,11 +139,12 @@ class RegistrasiMahasiswa extends StatelessWidget {
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
-                        Row(children: const [
+                        Row(children: [
                           Expanded(
                             child: TextField(
-                              style: TextStyle(fontSize: 16),
-                              decoration: InputDecoration(
+                              controller: _nimController,
+                              style: const TextStyle(fontSize: 16),
+                              decoration: const InputDecoration(
                                   isDense: true,
                                   contentPadding: EdgeInsets.all(8),
                                   border: OutlineInputBorder(
@@ -118,11 +173,13 @@ class RegistrasiMahasiswa extends StatelessWidget {
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
-                        Row(children: const [
+                        Row(children: [
                           Expanded(
                             child: TextField(
-                              style: TextStyle(fontSize: 16),
-                              decoration: InputDecoration(
+                              obscureText: true,
+                              controller: _passwordController,
+                              style: const TextStyle(fontSize: 16),
+                              decoration: const InputDecoration(
                                   isDense: true,
                                   contentPadding: EdgeInsets.all(8),
                                   border: OutlineInputBorder(
@@ -138,8 +195,11 @@ class RegistrasiMahasiswa extends StatelessWidget {
             Center(
                 child: InkWell(
               onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const LoginMenu()));
+                String nama = _namaController.text;
+                String nim = _nimController.text;
+                String password = _passwordController.text;
+                print("Nama: $nama, NIM: $nim, Password: $password");
+                registerUser(nama, nim, password);
               },
               child: Container(
                   margin:
