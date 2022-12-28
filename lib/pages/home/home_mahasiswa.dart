@@ -5,12 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-const dataTitle = [
-  {"id": "1", "title": "ini kartu 1", "from": "Pak IB"},
-  {"id": "2", "title": "ini kartu 2", "from": "Pak Aldi"},
-  {"id": "3", "title": "ini kartu 3", "from": "Pak Jumadi"}
-];
-
 class HomeMahasiswa extends StatefulWidget {
   const HomeMahasiswa({super.key});
   @override
@@ -80,6 +74,16 @@ class _HomeMahasiswaState extends State<HomeMahasiswa> {
               ),
               InkWell(
                 onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pushNamed("/infowebsitemahasiswa");
+                },
+                child: Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: const BoxDecoration(color: Color(0xFFFBFBFB)),
+                    child: const Text("Info Website")),
+              ),
+              InkWell(
+                onTap: () {
                   removeLocalUser().then((value) => {
                         showDialog(
                             context: context,
@@ -131,7 +135,7 @@ class _HomeMahasiswaState extends State<HomeMahasiswa> {
                             itemBuilder: (context, index) {
                               return InkWell(
                                 onTap: () => Navigator.pushNamed(
-                                    context, "/chat",
+                                    context, "/chatmahasiswa",
                                     arguments:
                                         "${snapshot.data?.docs[index].id}"),
                                 child: Card(

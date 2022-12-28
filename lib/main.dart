@@ -1,5 +1,8 @@
+import 'package:chat_dosen/pages/chat/chat_dosen.dart';
 import 'package:chat_dosen/pages/home/home_dosen.dart';
 import 'package:chat_dosen/pages/home/home_mahasiswa.dart';
+import 'package:chat_dosen/pages/infowebsite/info_website.dart';
+import 'package:chat_dosen/pages/infowebsite/info_website_dosen.dart';
 import 'package:chat_dosen/pages/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:chat_dosen/firebase_options.dart';
@@ -44,7 +47,10 @@ class _MyAppState extends State<MyApp> {
           '/loginmenu': (context) => const LoginMenu(),
           '/homemahasiswa': (context) => const HomeMahasiswa(),
           '/homedosen': (context) => const HomeDosen(),
-          '/chat': (context) => const ChatMahasiswa()
+          '/chatmahasiswa': (context) => const ChatMahasiswa(),
+          '/chatdosen': (context) => const ChatDosen(),
+          '/infowebsitemahasiswa': (context) => const InfoWebsiteMahasiswa(),
+          '/infowebsitedosen': (context) => const InfoWebsiteDosen()
         });
   }
 }

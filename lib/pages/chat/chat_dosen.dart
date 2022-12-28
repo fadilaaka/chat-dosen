@@ -5,19 +5,19 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ChatMahasiswa extends StatefulWidget {
-  const ChatMahasiswa({super.key});
+class ChatDosen extends StatefulWidget {
+  const ChatDosen({super.key});
   @override
-  _ChatMahasiswaState createState() => _ChatMahasiswaState();
+  _ChatDosenState createState() => _ChatDosenState();
 }
 
 final String formattedDate = DateFormat.yMd().format(DateTime.now());
 final String formattedTime = DateFormat.Hm().format(DateTime.now());
 
-class _ChatMahasiswaState extends State<ChatMahasiswa> {
+class _ChatDosenState extends State<ChatDosen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController _pesanController = TextEditingController();
-  String? idMahasiswa;
+  String? idDosen;
 
   @override
   void initState() {
@@ -27,7 +27,7 @@ class _ChatMahasiswaState extends State<ChatMahasiswa> {
             print("Ini value local : $value");
             Map<String, dynamic> decodedValue = jsonDecode(value!);
             print("Ini id mahasiswa local : ${decodedValue['id']}");
-            idMahasiswa = decodedValue['id'];
+            idDosen = decodedValue['id'];
           })
         });
   }
@@ -48,9 +48,9 @@ class _ChatMahasiswaState extends State<ChatMahasiswa> {
           .doc('${idMahasiswa}_$idDosen')
           .collection("isipesan")
           .add({
-        "sender": idMahasiswa,
+        "sender": idDosen,
         "text": message,
-        "receiver": idDosen,
+        "receiver": idMahasiswa,
         "timestamp": '$formattedDate - $formattedTime'
       });
     } catch (error) {
@@ -75,13 +75,15 @@ class _ChatMahasiswaState extends State<ChatMahasiswa> {
 
   @override
   Widget build(BuildContext context) {
-    String? idDosen = ModalRoute.of(context)!.settings.arguments as String?;
+    String? idMahasiswa = ModalRoute.of(context)!.settings.arguments as String?;
 
     return Scaffold(
         appBar: AppBar(
           title: StreamBuilder(
-            stream:
-                _firestore.collection("users_dosen").doc(idDosen).snapshots(),
+            stream: _firestore
+                .collection("users_mahasiswa")
+                .doc(idMahasiswa)
+                .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 DocumentSnapshot user =
@@ -116,7 +118,7 @@ class _ChatMahasiswaState extends State<ChatMahasiswa> {
                       itemCount: snapshot.data?.docs.length,
                       itemBuilder: (context, index) {
                         final isSender =
-                            snapshot.data?.docs[index]["sender"] == idMahasiswa;
+                            snapshot.data?.docs[index]["sender"] == idDosen;
                         final text = snapshot.data?.docs[index]["text"];
                         final timestamp =
                             snapshot.data?.docs[index]["timestamp"];

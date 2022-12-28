@@ -1,14 +1,9 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-const dataTitle = [
-  {"id": "1", "title": "ini kartu 1", "from": "Mahasiswa 1"},
-  {"id": "2", "title": "ini kartu 2", "from": "Mahasiswa 2"},
-  {"id": "3", "title": "ini kartu 3", "from": "Mahasiswa 3"}
-];
 
 class HomeDosen extends StatefulWidget {
   const HomeDosen({super.key});
@@ -17,6 +12,7 @@ class HomeDosen extends StatefulWidget {
 }
 
 class _HomeDosenState extends State<HomeDosen> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String? nama;
   @override
   void initState() {
@@ -120,51 +116,67 @@ class _HomeDosenState extends State<HomeDosen> {
                       topRight: Radius.circular(24.0))),
               child: Container(
                   margin: const EdgeInsets.only(left: 20, right: 20),
-                  child: ListView.builder(
-                      itemCount: dataTitle.length,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () => Navigator.pushNamed(context, "/chat",
-                              arguments: "${dataTitle[index]["id"]}"),
-                          child: Card(
-                              elevation: 2,
-                              child: Padding(
-                                  padding: const EdgeInsets.all(12),
-                                  child: Row(
-                                    children: [
-                                      const Icon(Icons.person),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            margin:
-                                                const EdgeInsets.only(left: 12),
-                                            child: Text(
-                                              dataTitle[index]["from"]!,
-                                              style: GoogleFonts.nunito(
-                                                  textStyle: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold)),
+                  child: FutureBuilder(
+                    future: _firestore.collection("users_mahasiswa").get(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                            itemCount: snapshot.data?.docs.length,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onTap: () => Navigator.pushNamed(
+                                    context, "/chatdosen",
+                                    arguments:
+                                        "${snapshot.data?.docs[index].id}"),
+                                child: Card(
+                                    elevation: 2,
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(12),
+                                        child: Row(
+                                          children: [
+                                            const Icon(Icons.person),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  margin: const EdgeInsets.only(
+                                                      left: 12),
+                                                  child: Text(
+                                                    snapshot.data?.docs[index]
+                                                        ["nama"],
+                                                    style: GoogleFonts.nunito(
+                                                        textStyle:
+                                                            const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  margin: const EdgeInsets.only(
+                                                      left: 12),
+                                                  child: Text(
+                                                    "Mahasiswa",
+                                                    style: GoogleFonts.nunito(
+                                                        textStyle:
+                                                            const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300)),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                          Container(
-                                            margin:
-                                                const EdgeInsets.only(left: 12),
-                                            child: Text(
-                                              "Mahasiswa",
-                                              style: GoogleFonts.nunito(
-                                                  textStyle: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w300)),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ))),
-                        );
-                      })),
+                                          ],
+                                        ))),
+                              );
+                            });
+                      } else {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                    },
+                  )),
             ),
           ),
         )
