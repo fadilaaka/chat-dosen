@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,6 +18,7 @@ class HomeMahasiswa extends StatefulWidget {
 }
 
 class _HomeMahasiswaState extends State<HomeMahasiswa> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   String? nama;
   @override
   void initState() {
@@ -120,51 +122,67 @@ class _HomeMahasiswaState extends State<HomeMahasiswa> {
                       topRight: Radius.circular(24.0))),
               child: Container(
                   margin: const EdgeInsets.only(left: 20, right: 20),
-                  child: ListView.builder(
-                      itemCount: dataTitle.length,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () => Navigator.pushNamed(context, "/chat",
-                              arguments: "${dataTitle[index]["id"]}"),
-                          child: Card(
-                              elevation: 2,
-                              child: Padding(
-                                  padding: const EdgeInsets.all(12),
-                                  child: Row(
-                                    children: [
-                                      const Icon(Icons.person),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            margin:
-                                                const EdgeInsets.only(left: 12),
-                                            child: Text(
-                                              dataTitle[index]["from"]!,
-                                              style: GoogleFonts.nunito(
-                                                  textStyle: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.bold)),
+                  child: FutureBuilder(
+                    future: _firestore.collection("users_dosen").get(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return ListView.builder(
+                            itemCount: snapshot.data?.docs.length,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onTap: () => Navigator.pushNamed(
+                                    context, "/chat",
+                                    arguments:
+                                        "${snapshot.data?.docs[index].id}"),
+                                child: Card(
+                                    elevation: 2,
+                                    child: Padding(
+                                        padding: const EdgeInsets.all(12),
+                                        child: Row(
+                                          children: [
+                                            const Icon(Icons.person),
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Container(
+                                                  margin: const EdgeInsets.only(
+                                                      left: 12),
+                                                  child: Text(
+                                                    snapshot.data?.docs[index]
+                                                        ["nama"],
+                                                    style: GoogleFonts.nunito(
+                                                        textStyle:
+                                                            const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold)),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  margin: const EdgeInsets.only(
+                                                      left: 12),
+                                                  child: Text(
+                                                    "Dosen",
+                                                    style: GoogleFonts.nunito(
+                                                        textStyle:
+                                                            const TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w300)),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
-                                          ),
-                                          Container(
-                                            margin:
-                                                const EdgeInsets.only(left: 12),
-                                            child: Text(
-                                              "ini bagian kartu : ${dataTitle[index]["title"]!}",
-                                              style: GoogleFonts.nunito(
-                                                  textStyle: const TextStyle(
-                                                      fontWeight:
-                                                          FontWeight.w300)),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ))),
-                        );
-                      })),
+                                          ],
+                                        ))),
+                              );
+                            });
+                      } else {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                    },
+                  )),
             ),
           ),
         )

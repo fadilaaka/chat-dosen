@@ -1,10 +1,59 @@
-import 'package:chat_dosen/pages/login/menu_login.dart';
 import 'package:chat_dosen/pages/registration/menu_registration.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class RegistrasiDosen extends StatelessWidget {
+class RegistrasiDosen extends StatefulWidget {
   const RegistrasiDosen({super.key});
+  @override
+  _RegistrasiDosenState createState() => _RegistrasiDosenState();
+}
+
+class _RegistrasiDosenState extends State<RegistrasiDosen> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final TextEditingController _namaController = TextEditingController();
+  final TextEditingController _nidnController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<void> registerUser(String nama, String nidn, String password) async {
+    try {
+      await _firestore.collection("users_dosen").add(
+          {"nama": nama, "nidn": nidn, "password": password, "role": "dosen"});
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+                title: const Text("Sukses"),
+                content: const Text("Pendaftaran berhasil!"),
+                actions: <Widget>[
+                  InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pushReplacementNamed("/loginmenu");
+                    },
+                    child: const Text("Ok"),
+                  )
+                ]);
+          });
+    } catch (error) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text("Error"),
+              content: Text(error.toString()),
+              actions: <Widget>[
+                InkWell(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text("Ok"),
+                )
+              ],
+            );
+          });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,11 +101,12 @@ class RegistrasiDosen extends StatelessWidget {
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
-                        Row(children: const [
+                        Row(children: [
                           Expanded(
                             child: TextField(
-                              style: TextStyle(fontSize: 16),
-                              decoration: InputDecoration(
+                              controller: _namaController,
+                              style: const TextStyle(fontSize: 16),
+                              decoration: const InputDecoration(
                                   isDense: true,
                                   contentPadding: EdgeInsets.all(8),
                                   border: OutlineInputBorder(
@@ -85,11 +135,12 @@ class RegistrasiDosen extends StatelessWidget {
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
-                        Row(children: const [
+                        Row(children: [
                           Expanded(
                             child: TextField(
-                              style: TextStyle(fontSize: 16),
-                              decoration: InputDecoration(
+                              controller: _nidnController,
+                              style: const TextStyle(fontSize: 16),
+                              decoration: const InputDecoration(
                                   isDense: true,
                                   contentPadding: EdgeInsets.all(8),
                                   border: OutlineInputBorder(
@@ -118,11 +169,13 @@ class RegistrasiDosen extends StatelessWidget {
                                 fontWeight: FontWeight.bold),
                           ),
                         ),
-                        Row(children: const [
+                        Row(children: [
                           Expanded(
                             child: TextField(
-                              style: TextStyle(fontSize: 16),
-                              decoration: InputDecoration(
+                              obscureText: true,
+                              controller: _passwordController,
+                              style: const TextStyle(fontSize: 16),
+                              decoration: const InputDecoration(
                                   isDense: true,
                                   contentPadding: EdgeInsets.all(8),
                                   border: OutlineInputBorder(
@@ -138,8 +191,11 @@ class RegistrasiDosen extends StatelessWidget {
             Center(
                 child: InkWell(
               onTap: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => const LoginMenu()));
+                String nama = _namaController.text;
+                String nidn = _nidnController.text;
+                String password = _passwordController.text;
+                print("Nama: $nama, NIM: $nidn, Password: $password");
+                registerUser(nama, nidn, password);
               },
               child: Container(
                   margin:

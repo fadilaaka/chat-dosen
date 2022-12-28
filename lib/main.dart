@@ -1,3 +1,4 @@
+import 'package:chat_dosen/pages/home/home_dosen.dart';
 import 'package:chat_dosen/pages/home/home_mahasiswa.dart';
 import 'package:chat_dosen/pages/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,7 +27,7 @@ class _MyAppState extends State<MyApp> {
     // Initialization code goes here
     Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform)
         .whenComplete(() {
-      print("Compelete initialized Firebase");
+      print("Complete initialized Firebase");
       setState(() {});
     });
   }
@@ -42,6 +43,7 @@ class _MyAppState extends State<MyApp> {
           '/settings': (context) => const SettingsPages(),
           '/loginmenu': (context) => const LoginMenu(),
           '/homemahasiswa': (context) => const HomeMahasiswa(),
+          '/homedosen': (context) => const HomeDosen(),
           '/chat': (context) => const ChatMahasiswa()
         });
   }

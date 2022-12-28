@@ -28,7 +28,7 @@ class _LoginMahasiswaState extends State<LoginMahasiswa> {
       print("ID: ${userDocument.id}");
       print("NIM: ${userDocument.get('nim')}");
       print("Name: ${userDocument.get('nama')}");
-      print("Name: ${userDocument.get('role')}");
+      print("Role: ${userDocument.get('role')}");
       print("Password: ${userDocument.get('password')}");
 
       Map dataUser = {

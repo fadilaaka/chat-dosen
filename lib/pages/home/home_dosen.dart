@@ -5,9 +5,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 const dataTitle = [
-  {"id": "1", "title": "ini kartu 1", "from": "Pak IB"},
-  {"id": "2", "title": "ini kartu 2", "from": "Pak Aldi"},
-  {"id": "3", "title": "ini kartu 3", "from": "Pak Jumadi"}
+  {"id": "1", "title": "ini kartu 1", "from": "Mahasiswa 1"},
+  {"id": "2", "title": "ini kartu 2", "from": "Mahasiswa 2"},
+  {"id": "3", "title": "ini kartu 3", "from": "Mahasiswa 3"}
 ];
 
 class HomeDosen extends StatefulWidget {
@@ -152,7 +152,7 @@ class _HomeDosenState extends State<HomeDosen> {
                                             margin:
                                                 const EdgeInsets.only(left: 12),
                                             child: Text(
-                                              "ini bagian kartu : ${dataTitle[index]["title"]!}",
+                                              "Mahasiswa",
                                               style: GoogleFonts.nunito(
                                                   textStyle: const TextStyle(
                                                       fontWeight:
