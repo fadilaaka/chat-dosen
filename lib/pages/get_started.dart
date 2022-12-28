@@ -1,6 +1,11 @@
+import 'dart:convert';
+
+import 'package:chat_dosen/pages/home/home_dosen.dart';
+import 'package:chat_dosen/pages/home/home_mahasiswa.dart';
 import 'package:chat_dosen/pages/login/menu_login.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GetStarted extends StatelessWidget {
   const GetStarted({super.key});
@@ -53,11 +58,35 @@ class GetStarted extends StatelessWidget {
                     ),
                     const SizedBox(height: 16.0),
                     InkWell(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const LoginMenu()));
+                      onTap: () async {
+                        SharedPreferences prefs =
+                            await SharedPreferences.getInstance();
+
+                        if (prefs.containsKey("localuser")) {
+                          String? encodedValue = prefs.getString("localuser");
+
+                          var decodedValue = jsonDecode(encodedValue!);
+
+                          print("Ini data User ");
+                          print(decodedValue);
+                          if (decodedValue['role'] == "mahasiswa") {
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const HomeMahasiswa()));
+                          }
+
+                          if (decodedValue['role'] == 'dosen') {
+                            Navigator.of(context).pushReplacement(
+                                MaterialPageRoute(
+                                    builder: (context) => const HomeDosen()));
+                          }
+                        } else {
+                          Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const LoginMenu()));
+                        }
                       },
                       child: Container(
                           margin: const EdgeInsets.only(top: 12),

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "94676476141",
+    "project_id": "chat-dosen-b9cd5",
+    "storage_bucket": "chat-dosen-b9cd5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:94676476141:android:6bf5b8076274a3054c2ce4",
+        "android_client_info": {
+          "package_name": "com.example.chat_dosen"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "94676476141-egje3t0ltnbvru9g5tfi1tpudgesoi53.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCJqqXcXg5MNfylomJPaIi44Ihpl5Gi0Is"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "94676476141-egje3t0ltnbvru9g5tfi1tpudgesoi53.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
