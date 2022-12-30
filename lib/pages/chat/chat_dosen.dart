@@ -11,9 +11,6 @@ class ChatDosen extends StatefulWidget {
   _ChatDosenState createState() => _ChatDosenState();
 }
 
-final String formattedDate = DateFormat.yMd().format(DateTime.now());
-final String formattedTime = DateFormat.Hm().format(DateTime.now());
-
 class _ChatDosenState extends State<ChatDosen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final TextEditingController _pesanController = TextEditingController();
@@ -40,8 +37,8 @@ class _ChatDosenState extends State<ChatDosen> {
     return prefs.getString('localuser');
   }
 
-  Future<void> sendMessage(
-      String message, String idMahasiswa, String idDosen) async {
+  Future<void> sendMessage(String message, String idMahasiswa, String idDosen,
+      String formattedDate, String formattedTime) async {
     try {
       _firestore
           .collection("messages")
@@ -175,8 +172,13 @@ class _ChatDosenState extends State<ChatDosen> {
                         child: InkWell(
                             onTap: () {
                               String message = _pesanController.text;
+                              final String formattedDate =
+                                  DateFormat.yMd().format(DateTime.now());
+                              final String formattedTime =
+                                  DateFormat.Hm().format(DateTime.now());
                               print("ini ontap widget");
-                              sendMessage(message, idMahasiswa!, idDosen!);
+                              sendMessage(message, idMahasiswa!, idDosen!,
+                                  formattedDate, formattedTime);
                               _pesanController.clear();
                             },
                             child: const Icon(Icons.send)),
