@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.chat_dosen">
+    package="com.chat_dosen">
     <uses-permission android:name="android.permission.INTERNET" />
 
    <application

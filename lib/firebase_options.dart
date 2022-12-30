@@ -66,8 +66,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '94676476141',
     projectId: 'chat-dosen-b9cd5',
     storageBucket: 'chat-dosen-b9cd5.appspot.com',
-    iosClientId: '94676476141-b9cddbt1acsc89c2jacj7il79flgl1dq.apps.googleusercontent.com',
-    iosBundleId: 'com.example.chatDosen',
+    iosClientId:
+        '94676476141-b9cddbt1acsc89c2jacj7il79flgl1dq.apps.googleusercontent.com',
+    iosBundleId: 'com.chatDosen',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
@@ -76,7 +77,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '94676476141',
     projectId: 'chat-dosen-b9cd5',
     storageBucket: 'chat-dosen-b9cd5.appspot.com',
-    iosClientId: '94676476141-b9cddbt1acsc89c2jacj7il79flgl1dq.apps.googleusercontent.com',
-    iosBundleId: 'com.example.chatDosen',
+    iosClientId:
+        '94676476141-b9cddbt1acsc89c2jacj7il79flgl1dq.apps.googleusercontent.com',
+    iosBundleId: 'com.chatDosen',
   );
 }
